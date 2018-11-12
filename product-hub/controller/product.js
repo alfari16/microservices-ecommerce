@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
       offset
     })
     console.log('all Product', result)
-    res.json(result)
+    res.json({ isOk: true, result })
   } catch (err) {
     console.error(err)
     res.status(500).json({ err, isError: true })
@@ -44,7 +44,7 @@ router.post(
     try {
       const body = req.body
       const result = await Product.create({ ...body, userId: req.stateId })
-      res.json(result)
+      res.json({ isOk: true, result })
     } catch (err) {
       console.error(err)
       res.status(500).json({ err, isError: true })
@@ -61,7 +61,7 @@ router.get('/:id', async (req, res) => {
       }
     })
     console.log('One Product', result)
-    if (result) res.json(result)
+    if (result) res.json({ isOk: true, result })
     else res.status(404).json({ isError: true, errorMsg: 'Product Not Found' })
   } catch (err) {
     console.error(err)
@@ -105,11 +105,42 @@ router.put(
             id: productId
           }
         })
-        res.json(result)
+        res.json({ isOk: true, result })
       }
     } catch (err) {
       console.error(err)
       res.status(500).json({ err, isError: true })
+    }
+  }
+)
+
+router.delete(
+  '/:id/delete',
+  validate({
+    params: {
+      id: joi.number().required()
+    }
+  }),
+  async (req, res) => {
+    try {
+      const validate = Product.findOne({
+        where: {
+          id: req.params.id
+        }
+      })
+      if (!validate)
+        return res
+          .status(404)
+          .json({ isError: true, errorMsg: 'Product Not Found' })
+      const result = await Product.destroy({
+        where: {
+          id: req.params.id
+        }
+      })
+      res.json({ isOk: true, result })
+    } catch (error) {
+      console.error(err)
+      res.json({ isError: true, err })
     }
   }
 )

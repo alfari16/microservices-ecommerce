@@ -74,7 +74,7 @@ router.post(
           .status(500)
           .json({ errorMsg: 'Email already taken', isError: true })
       const result = await User.create(req.body)
-      res.json(result)
+      res.json({ isOk: true, result })
     } catch (err) {
       res.status(500).json({ err, isError: true })
       console.error(err)

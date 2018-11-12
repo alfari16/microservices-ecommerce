@@ -19,6 +19,7 @@ const Invoice = invoiceModel(db, Sequelize)
 
 module.exports = {
   sync: args => db.sync(args),
+  sequelize: db,
   User: db.models.User,
   Product: db.models.Product,
   Transaction: db.models.Transaction,
