@@ -13,7 +13,12 @@ router.get('/', async (req, res) => {
 
     const result = await Product.findAll({
       limit,
-      offset
+      offset,
+      where:{
+        stock:{
+          gt: 0
+        }
+      }
     })
     console.log('all Product', result)
     res.json({ isOk: true, result })

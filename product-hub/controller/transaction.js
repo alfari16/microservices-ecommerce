@@ -46,6 +46,35 @@ router.post(
           })),
           { transaction }
         )
+        let allProduct = await Product.findAll({
+          where: {
+            id: {
+              in: req.body.items.map(el => el.id)
+            }
+          },
+          attributes: ['id', 'stock']
+        })
+        allProduct = allProduct.map(el => ({
+          id: el.id,
+          stock: el.stock
+        }))
+        await Promise.all(
+          allProduct.map(el => {
+            return Product.update(
+              {
+                stock:
+                  el.stock -
+                  req.body.items.find(inner => inner.id === el.id).item
+              },
+              {
+                where: {
+                  id: el.id
+                },
+                transaction
+              }
+            )
+          })
+        )
         res.json({ isOk: true })
       } catch (err) {
         res.json({ isError: true, err })
