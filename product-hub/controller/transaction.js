@@ -169,22 +169,27 @@ router.post(
   (req, res) => {
     sequelize.transaction(async transaction => {
       try {
-        const { id } = await transactionLunas()
+        const allTrans = await transactionLunas(req)
+        const { id } = allTrans.find(el => el.id === req.body.transactionId)
+
+        if (!id)
+          return res
+            .status(404)
+            .json({ isError: true, errorMsg: 'Transaction not found' })
+
         await Transaction.update(
           {
             processed: true
           },
           {
             where: {
-              id: req.body.transactionId,
-              id: {
-                in: id
-              }
+              id: req.body.transactionId
             },
             transaction
           }
         )
-      } catch (error) {
+        res.json({ isOk: true })
+      } catch (err) {
         console.error(err)
         res.json({ err, isError: true })
       }
