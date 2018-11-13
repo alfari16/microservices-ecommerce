@@ -4,6 +4,14 @@ const joi = require('joi')
 const validate = require('express-validation')
 const router = require('express').Router()
 
+const kue = require('kue')
+const queue = kue.createQueue()
+
+queue.process('order', (job, done) => {
+  console.log(job.data.test);
+  done()
+})
+
 router.post(
   '/create',
   validate({
@@ -63,8 +71,7 @@ router.post(
             return Product.update(
               {
                 stock:
-                  el.stock -
-                  req.body.items.find(inner => inner.id === el.id).item
+                  el.stock - req.body.items.find(inner => inner.id === el.id).item
               },
               {
                 where: {
@@ -75,8 +82,11 @@ router.post(
             )
           })
         )
+        queue.create('order', { test:'test' }).save()
         res.json({ isOk: true })
+        // done()
       } catch (err) {
+        // done(err)
         res.json({ isError: true, err })
         console.error(err)
         // transaction.rollback()
