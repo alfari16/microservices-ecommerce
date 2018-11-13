@@ -3,9 +3,6 @@ const { Product } = require('../models/')
 const router = require('express').Router()
 const joi = require('joi')
 const validate = require('express-validation')
-const jwt = require('jsonwebtoken')
-
-const validation = require('../middleware/validation')
 const isLoggedIn = require('../middleware/login')
 
 router.get('/', async (req, res) => {

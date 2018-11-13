@@ -14,7 +14,6 @@ module.exports = async (db, Sequelize) =>
       },
       password: Sequelize.STRING,
       balance: Sequelize.STRING,
-      role: Sequelize.ENUM('USER', 'ADMIN'),
       photoUrl: Sequelize.STRING
     },
     {

@@ -12,10 +12,18 @@ const db = new Sequelize({
   dialect: 'mysql'
 })
 
-const User = userModel(db, Sequelize)
-const Product = productModel(db, Sequelize)
-const Transaction = transactionModel(db, Sequelize)
-const Invoice = invoiceModel(db, Sequelize)
+userModel(db, Sequelize)
+productModel(db, Sequelize)
+transactionModel(db, Sequelize)
+invoiceModel(db, Sequelize)
+
+db.models.Invoice.hasMany(db.models.Transaction, {
+  foreignKey: 'invoiceId'
+})
+
+db.models.Transaction.belongsTo(db.models.Invoice, {
+  foreignKey: 'invoiceId'
+})
 
 module.exports = {
   sync: args => db.sync(args),

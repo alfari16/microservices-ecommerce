@@ -8,13 +8,9 @@ module.exports = async (db, Sequelize) =>
         autoIncrement: true
       },
       invoice: Sequelize.STRING,
-      lunas: Sequelize.BOOLEAN,
       total: Sequelize.STRING,
-      bayar: Sequelize.STRING,
-      userId: Sequelize.INTEGER
-    },
-    {
-      timestamps: false
+      paid: Sequelize.STRING,
+      buyerId: Sequelize.INTEGER
     }
   )
 

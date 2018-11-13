@@ -56,10 +56,6 @@ router.post(
         .required(),
       password: joi.string().required(),
       nama: joi.string().required(),
-      role: joi
-        .string()
-        .regex(/^(?:USER|ADMIN)$/)
-        .required(),
       photoUrl: joi.string().required()
     },
     options: {

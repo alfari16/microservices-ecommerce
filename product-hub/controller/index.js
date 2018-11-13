@@ -5,5 +5,5 @@ const transaction = require('./transaction')
 module.exports = (app) => {
   app.use('/products', product)
   app.use('/auth', user)
-  app.use('/order', transaction)
+  app.use('/orders', transaction)
 }

@@ -7,11 +7,10 @@ module.exports = async (db, Sequelize) =>
         primaryKey: true,
         autoIncrement: true
       },
-      userId: Sequelize.INTEGER,
       productId: Sequelize.INTEGER,
       invoiceId: Sequelize.INTEGER,
       item: Sequelize.INTEGER,
-      date: Sequelize.DATE
+      processed: Sequelize.BOOLEAN
     },
     {
       timestamps: false

@@ -1,4 +1,4 @@
-const { Transaction, User, Invoice, sequelize } = require('../models/')
+const { Transaction, Product, User, Invoice, sequelize } = require('../models/')
 const isLoggedIn = require('../middleware/login')
 const joi = require('joi')
 const validate = require('express-validation')
@@ -34,7 +34,7 @@ router.post(
           {
             invoice: `INV-${Date.now()}`,
             total,
-            userId: req.stateId
+            buyerId: req.stateId
           },
           { transaction }
         )
@@ -42,7 +42,6 @@ router.post(
           req.body.items.map(el => ({
             productId: el.id,
             item: el.item,
-            userId: req.stateId,
             invoiceId: id
           })),
           { transaction }
@@ -57,14 +56,29 @@ router.post(
   }
 )
 
-router.get('/all', isLoggedIn, async (req, res) => {
+router.get('/allorder-buyer', isLoggedIn, async (req, res) => {
   try {
+    const lunas = req.query.status === 'lunas'
     const result = await Invoice.findAll({
       where: {
-        lunas: req.query.status === 'lunas',
-        userId: req.stateId
+        buyerId: req.stateId,
+        total: lunas
+          ? sequelize.col('Invoice.paid')
+          : {
+              [sequelize.Op.gt]: sequelize.col('Invoice.paid')
+            }
       }
     })
+    res.json({ isOk: true, result })
+  } catch (err) {
+    res.json({ isError: true, err })
+    console.error(err)
+  }
+})
+
+router.get('/allorder-seller', isLoggedIn, async (req, res) => {
+  try {
+    const result = await transactionLunas(req)
     res.json({ isOk: true, result })
   } catch (err) {
     res.json({ isError: true, err })
@@ -91,7 +105,7 @@ router.post(
         const sisa = Math.max(0, req.body.value - total)
         const { balance } = await User.findOne({ where: { id: req.stateId } })
 
-        const all = [
+        await Promise.all([
           User.update(
             {
               balance: Number(Number(balance) + sisa)
@@ -100,13 +114,11 @@ router.post(
           ),
           Invoice.update(
             {
-              lunas: req.body.value >= total,
-              bayar: Math.min(req.body.value, total)
+              paid: Math.min(req.body.value, total)
             },
             { where: { id: req.body.invoiceId }, transaction }
           )
-        ]
-        await Promise.all(all)
+        ])
 
         res.json({ isOk: true })
       } catch (err) {
@@ -117,4 +129,66 @@ router.post(
   }
 )
 
+router.post(
+  '/process-order',
+  isLoggedIn,
+  validate({
+    body: {
+      transactionId: joi.number().required()
+    }
+  }),
+  (req, res) => {
+    sequelize.transaction(async transaction => {
+      try {
+        const { id } = await transactionLunas()
+        await Transaction.update(
+          {
+            processed: true
+          },
+          {
+            where: {
+              id: req.body.transactionId,
+              id: {
+                in: id
+              }
+            },
+            transaction
+          }
+        )
+      } catch (error) {
+        console.error(err)
+        res.json({ err, isError: true })
+      }
+    })
+  }
+)
+
+const transactionLunas = async req => {
+  const processed = req.query.status === 'processed'
+  const productId = await Product.findAll({
+    attributes: ['id'],
+    where: {
+      userId: req.stateId
+    }
+  })
+  return Transaction.findAll({
+    where: {
+      productId: {
+        in: productId.map(el => el.id)
+      },
+      processed
+    },
+    include: [
+      {
+        model: Invoice,
+        where: {
+          total: {
+            [sequelize.Op.eq]: sequelize.col('Invoice.paid')
+          }
+        },
+        attributes: ['total', 'paid']
+      }
+    ]
+  })
+}
 module.exports = router
