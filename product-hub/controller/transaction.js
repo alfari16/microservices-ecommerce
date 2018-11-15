@@ -8,8 +8,66 @@ const kue = require('kue')
 const queue = kue.createQueue()
 
 queue.process('order', (job, done) => {
-  console.log(job.data.test);
-  done()
+  const { req } = job.data
+  sequelize.transaction(async transaction => {
+    try {
+      const total = req.body.items.reduce((prev, curr) =>
+        Number(prev.total + curr.total)
+      )
+      const { id } = await Invoice.create(
+        {
+          invoice: `INV-${Date.now()}`,
+          total,
+          buyerId: req.stateId
+        },
+        { transaction }
+      )
+      await Transaction.bulkCreate(
+        req.body.items.map(el => ({
+          productId: el.id,
+          item: el.item,
+          invoiceId: id
+        })),
+        { transaction }
+      )
+      let allProduct = await Product.findAll({
+        where: {
+          id: {
+            in: req.body.items.map(el => el.id)
+          }
+        },
+        attributes: ['id', 'stock']
+      })
+      allProduct = allProduct.map(el => ({
+        id: el.id,
+        stock: el.stock
+      }))
+      await Promise.all(
+        allProduct.map(el => {
+          return Product.update(
+            {
+              stock:
+                el.stock - req.body.items.find(inner => inner.id === el.id).item
+            },
+            {
+              where: {
+                id: el.id
+              },
+              transaction
+            }
+          )
+        })
+      )
+      console.log('executed')
+      // res.json({ isOk: true })
+      done()
+    } catch (err) {
+      done(new Error('gagal'))
+      // res.json({ isError: true, err })
+      console.error(err)
+      // transaction.rollback()
+    }
+  })
 })
 
 router.post(
@@ -33,65 +91,20 @@ router.post(
   }),
   isLoggedIn,
   (req, res) => {
-    sequelize.transaction(async transaction => {
-      try {
-        const total = req.body.items.reduce((prev, curr) =>
-          Number(prev.total + curr.total)
-        )
-        const { id } = await Invoice.create(
-          {
-            invoice: `INV-${Date.now()}`,
-            total,
-            buyerId: req.stateId
-          },
-          { transaction }
-        )
-        await Transaction.bulkCreate(
-          req.body.items.map(el => ({
-            productId: el.id,
-            item: el.item,
-            invoiceId: id
-          })),
-          { transaction }
-        )
-        let allProduct = await Product.findAll({
-          where: {
-            id: {
-              in: req.body.items.map(el => el.id)
-            }
-          },
-          attributes: ['id', 'stock']
-        })
-        allProduct = allProduct.map(el => ({
-          id: el.id,
-          stock: el.stock
-        }))
-        await Promise.all(
-          allProduct.map(el => {
-            return Product.update(
-              {
-                stock:
-                  el.stock - req.body.items.find(inner => inner.id === el.id).item
-              },
-              {
-                where: {
-                  id: el.id
-                },
-                transaction
-              }
-            )
-          })
-        )
-        queue.create('order', { test:'test' }).save()
+    queue
+      .create('order', {
+        req: {
+          body: req.body,
+          stateId: req.stateId
+        }
+      })
+      .save((err) => {
+        if(err) {
+          console.error(err)
+          return res.json({ isError: true, err })
+        }
         res.json({ isOk: true })
-        // done()
-      } catch (err) {
-        // done(err)
-        res.json({ isError: true, err })
-        console.error(err)
-        // transaction.rollback()
-      }
-    })
+      })
   }
 )
 
