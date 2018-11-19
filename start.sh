@@ -1,0 +1,1 @@
+user-authorization/npm run dev & product-hub/npm run dev & ordering-service/npm run dev

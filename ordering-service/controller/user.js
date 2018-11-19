@@ -14,6 +14,10 @@ router.post(
         .email()
         .required(),
       password: joi.string().required()
+    },
+    options: {
+      allowUnknownBody: false,
+      allowUnknownHeaders: false
     }
   }),
   async (req, res) => {

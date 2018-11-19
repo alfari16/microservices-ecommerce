@@ -21,6 +21,6 @@ app.use((req, res, next) => {
 db.sync()
 router(app)
 
-app.listen(3000, () => {
-  console.log('Product hub running on port 3000')
+app.listen(process.env.PORT, () => {
+  console.log(`Product hub running on port ${process.env.PORT}`)
 })

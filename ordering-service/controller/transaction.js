@@ -121,110 +121,22 @@ router.post(
   }),
   isLoggedIn,
   (req, res) => {
-    // queue
-    //   .create('order', {
-    //     req: { body: req.body, stateId: req.stateId }
-    //   })
-    //   .on('failed', err => {
-    //     res.json({
-    //       isError: true,
-    //       ...JSON.parse(err)
-    //     })
-    //   })
-    //   .on('complete', () => {
-    //     res.json({ isOk: true })
-    //   })
-    //   .save(err => {
-    //     if (err) res.json({ isError: true, err })
-    //   })
-    sequelize.transaction(async transaction => {
-      try {
-        let outOfStock = {
-          bool: false,
-          data: []
-        }
-        let allProduct = await Product.findAll({
-          where: {
-            id: {
-              in: req.body.items.map(el => el.id)
-            }
-          },
-          attributes: ['id', 'stock']
+    queue
+      .create('order', {
+        req: { body: req.body, stateId: req.stateId }
+      })
+      .on('failed', err => {
+        res.json({
+          isError: true,
+          ...JSON.parse(err)
         })
-        allProduct = allProduct.map(el => {
-          if (
-            el.stock < req.body.items.find(inner => inner.id === el.id).item
-          ) {
-            outOfStock.bool = true
-            outOfStock.data.push(el)
-          }
-          return {
-            id: el.id,
-            stock: el.stock
-          }
-        })
-
-        //validation
-        if (req.body.items.length > allProduct.length) {
-          const notFound = req.items.length.filter(el =>
-            allProduct.find(inner => inner.id === el.id)
-          )
-          const error = {
-            errorMsg: 'Product not found',
-            data: notFound
-          }
-          return res.send('product not found')
-        }
-        if (outOfStock.bool) {
-          return res.json({
-            errorMsg: 'Stuff out of Stock',
-            isError: true
-          })
-        }
-
-        const promise1 = Promise.all(
-          allProduct.map(el => {
-            return Product.update(
-              {
-                stock:
-                  el.stock -
-                  req.body.items.find(inner => inner.id === el.id).item
-              },
-              {
-                where: {
-                  id: el.id
-                },
-                transaction
-              }
-            )
-          })
-        )
-
-        const promise2 = new Promise(async resolve => {
-          const total = req.body.items.reduce((prev, curr) =>
-            Number(prev.total + curr.total)
-          )
-          const { id } = await Invoice.create(
-            { invoice: `INV-${Date.now()}`, total, buyerId: req.stateId },
-            { transaction }
-          )
-          await Transaction.bulkCreate(
-            req.body.items.map(el => ({
-              productId: el.id,
-              item: el.item,
-              invoiceId: id
-            })),
-            { transaction }
-          )
-          resolve(true)
-        })
-
-        await Promise.all([promise1, promise2])
-        res.send({ isOk: 'ok' })
-      } catch (err) {
-        console.error(err)
-      }
-    })
+      })
+      .on('complete', () => {
+        res.json({ isOk: true })
+      })
+      .save(err => {
+        if (err) res.json({ isError: true, err })
+      })
   }
 )
 

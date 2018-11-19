@@ -56,7 +56,7 @@ router.post(
         .required(),
       password: joi.string().required(),
       nama: joi.string().required(),
-      photoUrl: joi.string().required()
+      photoUrl: joi.string()
     },
     options: {
       allowUnknownBody: false
@@ -69,8 +69,9 @@ router.post(
         return res
           .status(500)
           .json({ errorMsg: 'Email already taken', isError: true })
-      const data = await User.create(req.body)
-      res.json({ isOk: true, data })
+      await User.create(req.body)
+
+      res.json({ isOk: true })
     } catch (err) {
       res.status(500).json({ err, isError: true })
       console.error(err)
