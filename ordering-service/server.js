@@ -4,7 +4,7 @@ const bodyParser = require('body-parser')
 const logger = require('morgan')
 
 const db = require('./models/')
-const router = require('./controller/index')
+const router = require('./controller/transaction')
 
 const app = express()
 
@@ -17,9 +17,9 @@ app.use((req, res, next) => {
   res.header('Access-Control-Allow-Method', 'GET, POST')
   next()
 })
+app.use('/', router)
 
 db.sync()
-router(app)
 
 app.listen(process.env.PORT, () => {
   console.log(`Ordering Service running on port ${process.env.PORT}`)

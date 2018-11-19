@@ -1,4 +1,4 @@
-require('dotenv')
+require('dotenv').config()
 const Sequelize = require('sequelize')
 const userModel = require('./user')
 const productModel = require('./product')
@@ -7,8 +7,8 @@ const invoiceModel = require('./invoice')
 
 const db = new Sequelize({
   host: process.env.HOST,
-  username: process.env.USER,
-  password: process.env.PASSWORD,
+  username: process.env.DB_ATTR,
+  password: process.env.DB_ATTR,
   database: process.env.DATABASE,
   dialect: 'mysql'
 })
