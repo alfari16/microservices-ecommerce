@@ -30,6 +30,7 @@ router.get('/', async (req, res) => {
 
 router.post(
   '/create',
+  isLoggedIn,
   validate({
     body: {
       nama: joi.string().required(),
@@ -41,7 +42,6 @@ router.post(
       allowUnknownBody: false
     }
   }),
-  isLoggedIn,
   async (req, res) => {
     try {
       const body = req.body
@@ -73,6 +73,7 @@ router.get('/:id', async (req, res) => {
 
 router.put(
   '/:id/edit',
+  isLoggedIn,
   validate({
     params: {
       id: joi.number().required()
@@ -87,7 +88,6 @@ router.put(
       allowUnknownBody: false
     }
   }),
-  isLoggedIn,
   async (req, res) => {
     try {
       const productId = Number(req.params.id)
@@ -118,6 +118,7 @@ router.put(
 
 router.delete(
   '/:id/delete',
+  isLoggedIn,
   validate({
     params: {
       id: joi.number().required()
@@ -127,7 +128,8 @@ router.delete(
     try {
       const validate = Product.findOne({
         where: {
-          id: req.params.id
+          id: req.params.id,
+          userId: Number(req.stateId)
         }
       })
       if (!validate)
@@ -136,7 +138,8 @@ router.delete(
           .json({ isError: true, errorMsg: 'Product Not Found' })
       const data = await Product.destroy({
         where: {
-          id: req.params.id
+          id: req.params.id,
+          userId: Number(req.stateId)
         }
       })
       res.json({ isOk: true, data })
