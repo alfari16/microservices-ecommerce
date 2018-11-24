@@ -1,0 +1,47 @@
+<%- include ./partials/header %>
+<section class="author-panel pt-3">
+  <div class="container">
+    <div class="flex-wrap align-center">
+      <img src="<%= thumbnail %>" alt="<%= nim %> <%= name %> thumbnail" class="thumbnail">
+      <div class="right ml-3">
+        <p class="name">
+          <%= name %>
+        </p>
+        <small class="name-label mt-1">
+          <%= nim %></small>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container mt-5">
+  <p class="penulis jangka">
+    <span>Karya Saya</span>
+  </p>
+  <div class="row">
+    <% rows.forEach(row => { %>
+    <div class="md3 sm6 xs6">
+      <div class="card">
+        <figure class="img-wrapper content">
+          <img class="img-content" src="<%= row['thumbnail'] %>" alt="<%= row['title'] %>">
+        </figure>
+        <small class="date">
+          <%= row['date'] %>
+        </small>
+        <a href="<%= '/test' %>">
+          <p class="title text-capitalized">
+            <%= row['title'] %>
+          </p>
+        </a>
+        <p class="desc">
+          <%= row['description'] %>
+        </p>
+        <p class="penulis">
+          <%= row['name'] %>
+        </p>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  <%- include ./partials/pagination %>
+</div>
+<%- include ./partials/footer %>

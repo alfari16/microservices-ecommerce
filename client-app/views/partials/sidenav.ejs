@@ -1,0 +1,23 @@
+<div class="sidebar">
+  <section class="popular">
+    <p class="title">Produk Populer</p>
+    <hr>
+    <ul>
+      <%
+        popular.forEach(single => {
+      %>
+      <li>
+        <a href="#" class="flex-wrap">
+          <img class="sidenav-img" src="<%= single.photoUrl %>" alt="<%= single.nama %>">
+          <div class="right flex-wrap">
+            <p class="title sub-title"><%= single.nama %></p>
+            <p class="penulis">Rp<%= single.harga %></p>
+          </div>
+        </a>
+      </li>
+      <% 
+        });
+      %>
+    </ul>
+  </section>
+</div>

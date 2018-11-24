@@ -1,0 +1,39 @@
+<%- include ./partials/header %>
+<section class="main pt-3">
+  <div class="container">
+    <div class="row">
+      <div class="md12 sm12 xs12">
+        <p class="penulis jangka">
+          <span>Semua Post</span>
+        </p>
+        <div class="row">
+          <% rows.forEach(row => { %>
+          <div class="md3 sm6 xs6">
+            <div class="card">
+              <figure class="img-wrapper content">
+                <img class="img-content" src="<%= row['thumbnail'] %>" alt="<%= row['title'] %>">
+              </figure>
+              <small class="date">
+                <%= row['date'] %>
+              </small>
+              <a href="<%= '/test' %>">
+                <p class="title text-capitalized">
+                  <%= row['title'] %>
+                </p>
+              </a>
+              <p class="desc">
+                <%= row['description'] %>
+              </p>
+              <p class="penulis">
+                <%= row['name'] %>
+              </p>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <%- include ./partials/pagination %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include ./partials/footer %>

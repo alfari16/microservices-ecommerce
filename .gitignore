@@ -1,3 +1,4 @@
+client-app/node_modules
 ordering-service/node_modules
 product-hub/node_modules
 user-authorization/node_modules

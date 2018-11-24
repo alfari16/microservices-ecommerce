@@ -1,0 +1,45 @@
+<%- include ./partials/header %>
+<section class="main pt-3">
+  <div class="container">
+    <div class="row">
+      <div class="md8 sm9 xs12">
+        <p class="penulis jangka mb-3">
+          <span>Produk terbaru</span>
+        </p>
+        <div class="row">
+          <% product.forEach(row => { %>
+          <div class="md4 sm6 xs6">
+            <div class="card">
+              <figure class="img-wrapper content">
+                <img class="img-content" src="<%= row['photoUrl'] %>" alt="<%= row['nama'] %>">
+              </figure>
+              <a href="<%= '#' %>">
+                <p class="title text-capitalized">
+                  <%= row['nama'] %>
+              </p>
+              </a>
+              <small class="date">
+                <%= row.seller.nama %>
+              </small>
+              <div class="flex-wrap align-center">
+                <p class="penulis text-danger">
+                  Rp<%= row.harga %>
+                </p>
+                <div class="spacer"></div>
+                <button class="btn-warning btn">Beli</button>
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+        <div class="text-center mt-5">
+          <%- include ./partials/pagination %>
+        </div>
+      </div>
+      <div class="md4 sm3 xs12 primary bg-primary">
+        <%- include ./partials/sidenav %>
+      </div>
+    </div>
+  </div>
+</section>
+<%- include ./partials/footer %>
