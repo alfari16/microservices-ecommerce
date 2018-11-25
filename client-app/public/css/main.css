@@ -280,7 +280,7 @@ ul.link > li a{
   transition: 1s cubic-bezier(0.075, 0.82, 0.165, 1)
 }
 ul.link > li.active,
-ul.link > li:hover{
+ul.link > li:hover:not(.btn-link){
   background-color: var(--blueColor);
 }
 ul.link > li.active a,
@@ -422,6 +422,9 @@ footer .icon{
   color: white;
   border-radius: 5px
 }
+.btn.btn-warning{
+  background-color: #FFA726
+}
 .sidebar .btn{
   margin-left: -10px
 }
@@ -516,6 +519,36 @@ footer .icon{
 }
 nav + *{
   margin-top: 80px
+}
+
+.profile{
+  background-color: white;
+  padding: 20px 400px;
+  height: 100%;
+}
+
+.profile .profile-pics{
+  display: block;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 13px solid ghostwhite;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.4);
+  cursor: pointer;
+}
+.profile label:not(.picker){
+  color: #666;
+  font-weight: 800;
+  margin-bottom: 10px;
+  display: block
+}
+.profile .form-control{
+  height: 50px;
+  margin-bottom: 20px
 }
 @media (max-width:992px){
   .container{

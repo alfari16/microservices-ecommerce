@@ -43,6 +43,15 @@
             <li id="profile">
               <a href="/profile">Profil</a>
             </li>
+            <% if(isLoggedIn) { %>
+              <li class="btn-link">
+                <a href="/logout" class="ml-3 btn btn-warning">Logout</a>
+              </li>
+            <% }else { %>
+              <li class="btn-link">
+                <a href="/login" style="color:white" class="ml-3 btn btn-primary">Login</a>
+              </li>
+            <% } %>
             
           </ul>
         </div>

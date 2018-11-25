@@ -1,47 +1,29 @@
 <%- include ./partials/header %>
-<section class="author-panel pt-3">
-  <div class="container">
-    <div class="flex-wrap align-center">
-      <img src="<%= thumbnail %>" alt="<%= nim %> <%= name %> thumbnail" class="thumbnail">
-      <div class="right ml-3">
-        <p class="name">
-          <%= name %>
-        </p>
-        <small class="name-label mt-1">
-          <%= nim %></small>
-      </div>
-    </div>
-  </div>
+<section class="profile">
+  <form action="/profile" method="POST" enctype="multipart/form-data">
+    <label class="picker" for="profile-pics">
+      <img src="<%= photoUrl %>" class="profile-pics">
+    </label>
+    <input type="file" id="profile-pics" name="photo" accept="image/*" class="hidden">
+    
+    <label for="nama">Nama</label>
+    <input required type="text" id="nama" name="nama" value="<%= nama %>" class="form-control">
+    
+    <label for="email">Email</label>
+    <input required type="text" id="email" name="email" value="<%= email %>" class="form-control">
+    
+    <label for="balance">Balance</label>
+    <input required type="text" id="balance" name="balance" disabled value="<%= balance %>" class="form-control">
+    
+    <label for="password">Password</label>
+    <input required type="password" id="password" name="password" class="form-control">
+    <button class="form-control btn btn-primary">Simpan Perubahan</button>
+  </form>
 </section>
-<div class="container mt-5">
-  <p class="penulis jangka">
-    <span>Karya Saya</span>
-  </p>
-  <div class="row">
-    <% rows.forEach(row => { %>
-    <div class="md3 sm6 xs6">
-      <div class="card">
-        <figure class="img-wrapper content">
-          <img class="img-content" src="<%= row['thumbnail'] %>" alt="<%= row['title'] %>">
-        </figure>
-        <small class="date">
-          <%= row['date'] %>
-        </small>
-        <a href="<%= '/test' %>">
-          <p class="title text-capitalized">
-            <%= row['title'] %>
-          </p>
-        </a>
-        <p class="desc">
-          <%= row['description'] %>
-        </p>
-        <p class="penulis">
-          <%= row['name'] %>
-        </p>
-      </div>
-    </div>
-    <% }) %>
-  </div>
-  <%- include ./partials/pagination %>
-</div>
+<script>
+  $('#profile-pics').change(function(e){
+    const img = URL.createObjectURL(e.target.files[0])
+    $('.profile-pics').attr('src', img)
+  });
+</script>
 <%- include ./partials/footer %>

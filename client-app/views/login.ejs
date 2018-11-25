@@ -1,16 +1,16 @@
 <%- include ./partials/header %>
 <div class="login">
     <form action="/login" method="POST">
-        <% if(notLogin) { %>
+        <% if(!!notLogin) { %>
         <p class="title text-danger text-center">Anda harus login terlebih dahulu.</p>
         <% } %>
         <p class="title text-center login-title">Login</p>
-        <input placeholder="Username" class="form-control" type="text" name="username" required>
+        <input placeholder="Username" class="form-control" type="email" name="email" required>
         <input placeholder="Password" class="form-control" type="password" name="password" required>
         <% if(notFound){%>
         <p class="text-center text-danger mt-3">Username/Password tidak ditemukan</p>
         <% }%>
-        <p class="text-center text-mute mt-3">Belum punya akun? <a href="/daftar">Daftar</a>.</p>
+        <p class="text-center text-mute mt-3">Belum punya akun? <a href="/register">Daftar</a>.</p>
         <input class="btn form-control mt-3" type="submit" value="Login">
     </form>
 </div>

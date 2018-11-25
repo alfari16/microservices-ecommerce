@@ -121,7 +121,7 @@ router.post(
   }),
   isLoggedIn,
   (req, res) => {
-    queue
+    const job = queue
       .create('order', {
         req: { body: req.body, stateId: req.stateId }
       })
@@ -130,9 +130,11 @@ router.post(
           isError: true,
           ...JSON.parse(err)
         })
+        job.remove()
       })
       .on('complete', () => {
         res.json({ isOk: true })
+        job.remove()
       })
       .save(err => {
         if (err) res.json({ isError: true, err })
