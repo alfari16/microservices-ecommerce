@@ -1,0 +1,27 @@
+<%- include ./partials/header %>
+<div class="container mt-5">
+  <p class="penulis jangka mb-3">
+    <span>Produk Saya</span>
+  </p>
+  <div class="row">
+    <% rows.forEach(row => { %>
+      <div class="md4 sm6 xs6">
+        <div class="card">
+          <figure class="img-wrapper content">
+            <img class="img-content" src="<%= row['photoUrl'] %>" alt="<%= row['nama'] %>">
+          </figure>
+          <div class="flex-wrap align-center">
+            <a href="<%= '#' %>">
+              <p class="title text-capitalized">
+                <%= row['nama'] %>
+              </p>
+            </a>
+            <div class="spacer"></div>
+            <button class="btn-warning btn">Detail</button>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+<%- include ./partials/footer %>

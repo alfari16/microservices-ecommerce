@@ -1,29 +1,63 @@
 <%- include ./partials/header %>
 <section class="profile">
   <form action="/profile" method="POST" enctype="multipart/form-data">
-    <label class="picker" for="profile-pics">
-      <img src="<%= photoUrl %>" class="profile-pics">
+    <label class="picker flex-wrap justify-center" for="profile-pics">
+      <img src="<%= photoUrl %>" class="profile-pics" />
     </label>
-    <input type="file" id="profile-pics" name="photo" accept="image/*" class="hidden">
-    
+    <input
+      type="file"
+      id="profile-pics"
+      name="photo"
+      accept="image/*"
+      class="hidden"
+    />
+
     <label for="nama">Nama</label>
-    <input required type="text" id="nama" name="nama" value="<%= nama %>" class="form-control">
-    
+    <input
+      required
+      type="text"
+      id="nama"
+      name="nama"
+      value="<%= nama %>"
+      class="form-control"
+    />
+
     <label for="email">Email</label>
-    <input required type="text" id="email" name="email" value="<%= email %>" class="form-control">
-    
+    <input
+      required
+      type="text"
+      id="email"
+      name="email"
+      value="<%= email %>"
+      class="form-control"
+    />
+
     <label for="balance">Balance</label>
-    <input required type="text" id="balance" name="balance" disabled value="<%= balance %>" class="form-control">
-    
+    <input
+      required
+      type="text"
+      id="balance"
+      name="balance"
+      disabled
+      value="<%= balance %>"
+      class="form-control"
+    />
+
     <label for="password">Password</label>
-    <input required type="password" id="password" name="password" class="form-control">
+    <input
+      required
+      type="password"
+      id="password"
+      name="password"
+      class="form-control"
+    />
     <button class="form-control btn btn-primary">Simpan Perubahan</button>
   </form>
 </section>
 <script>
-  $('#profile-pics').change(function(e){
+  $('#profile-pics').change(function(e) {
     const img = URL.createObjectURL(e.target.files[0])
     $('.profile-pics').attr('src', img)
-  });
+  })
 </script>
 <%- include ./partials/footer %>

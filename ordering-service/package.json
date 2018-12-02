@@ -15,7 +15,7 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-validation": "^1.0.2",
-    "joi": "^14.0.4",
+    "joi": "^14.3.0",
     "jsonwebtoken": "^8.3.0",
     "kue": "^0.11.6",
     "morgan": "^1.9.1",

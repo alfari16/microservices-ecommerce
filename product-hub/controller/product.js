@@ -50,6 +50,20 @@ router.get('/product-popular', async (req, res) => {
   }
 })
 
+router.get('/own', isLoggedIn, async (req, res) => {
+  try {
+    const data = await Product.findAndCountAll({
+      where: {
+        userId: req.stateId
+      }
+    })
+    res.json({ isOk: true, data })
+  } catch (err) {
+    res.json({ isError: true, err })
+    console.error(err)
+  }
+})
+
 router.post(
   '/create',
   isLoggedIn,

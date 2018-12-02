@@ -15,10 +15,10 @@
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "express-validation": "^1.0.2",
-    "joi": "^14.0.4",
-    "jsonwebtoken": "^8.3.0",
+    "joi": "^14.3.0",
+    "jsonwebtoken": "^8.4.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.4",
-    "sequelize": "^4.41.1"
+    "sequelize": "^4.41.2"
   }
 }

@@ -1,16 +1,24 @@
 const express = require('express')
 const router = require('./router')
 const session = require('express-session')
+const redis = require('redis')
 const bodyParser = require('body-parser')
 const axios = require('axios')
+const redisStore = require('connect-redis')(session)
 
 const app = express()
+const client = redis.createClient()
 
 app.set('view engine', 'ejs')
 app.use(
   session({
-    expires: new Date(Date.now() + 30 * 86400 * 1000),
-    secret: 'client-app ecommerce',
+    store: new redisStore({
+      host: 'localhost',
+      port: '6479',
+      disableTTL: true,
+      client
+    }),
+    secret: 'keyboard cat',
     cookie: {
       expires: new Date(Date.now() + 30 * 86400 * 1000),
       maxAge: Date.now() + 30 * 86400 * 1000,
@@ -21,7 +29,6 @@ app.use(
   })
 )
 app.use((req, res, next) => {
-  console.log('SESSION', req.session)
   res.locals.isLoggedIn = !!req.session.token
   axios.defaults.headers.common['Authorization'] = `Bearer ${req.session.token}`
   req.axios = axios

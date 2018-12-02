@@ -73,9 +73,12 @@ queue.process('order', (job, done) => {
       )
 
       const promise2 = new Promise(async resolve => {
-        const total = req.body.items.reduce((prev, curr) =>
-          Number(prev.total + curr.total)
-        )
+        const total =
+          req.body.items.length > 1
+            ? req.body.items.reduce((prev, curr) =>
+                Number(prev.total + curr.total)
+              )
+            : req.body.items[0].total
         const { id } = await Invoice.create(
           { invoice: `INV-${Date.now()}`, total, buyerId: req.stateId },
           { transaction }

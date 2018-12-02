@@ -1,0 +1,62 @@
+<%- include ./partials/header %>
+<div class="container mt-3">
+  <ul class="nav nav-tabs">
+    <li class="text-bold pr-3 flex-wrap align-center">Buyer:</li>
+    <li class="nav-item">
+      <a class="nav-link" id="Pesanan" href="/transaction">Pesanan</a>
+    </li>
+    <% [{ name: 'Pesanan Selesai', link:
+    '/transaction/done' }].forEach(el => { %>
+      <li class="nav-item">
+        <a class="nav-link link-item" data-link="<%= el.link %>" id="<%= el.name %>" href="<%= el.link %>"><%= el.name %></a>
+      </li>
+    <% }) %>
+    <div class="spacer"></div>
+    <li class="text-bold pr-3 flex-wrap align-center">Seller:</li>
+    <% [{ name: 'Dipesan', link: '/transaction/ordered' }, { name: 'Diproses', link:
+        '/transaction/processed' }].forEach(el => { %>
+      <li class="nav-item">
+        <a class="nav-link link-item" data-link="<%= el.link %>" id="<%= el.name %>" href="<%= el.link %>">
+          <%= el.name %></a>
+      </li>
+    <% }) %>
+  </ul>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Invoice</th>
+        <th scope="col">Total</th>
+        <th scope="col">Dibayar</th>
+        <th scope="col">Tanggal Beli</th>
+        <th scope="col">Tanggal Dibayar</th>
+        <th scope="col">Keterangan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% data.forEach((el, idx) => { %>
+        <tr>
+          <th scope="row"><%= idx+1 %></th>
+          <td><%= el.invoice %></td>
+          <td>Rp <%= el.total %></td>
+          <td>Rp <%= el.paid %></td>
+          <td><%= el.createdAt %></td>
+          <td><%= el.lunas?el.updatedAt:'-' %></td>
+          <td><%= el.lunas?'LUNAS':'BELUM LUNAS' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
+<script>
+  let home = true
+  $('.link-item').each((idx, el) => {
+    const href = window.location.href
+    if (href.includes($(el).attr('data-link'))) {
+      home = false
+      return $(el).addClass('active')
+    }
+  })
+  if(home) $('#Pesanan').addClass('active')
+</script>
+<%- include ./partials/footer %>

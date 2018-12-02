@@ -172,6 +172,9 @@ nav .flex-wrap{
   display: -moz-flex;
   display: flex;
 }
+.flex-wrap.align-center{
+  align-content: center
+}
 .admin-act{
   border-top: 1px solid #ddd;
   padding-top: 10px;
@@ -261,6 +264,7 @@ nav .flex-wrap{
 ul.link{
   display: flex;
   padding: 0;
+  margin-bottom: 0;
   justify-content: flex-end;
   width: 100%;
   flex: 1
@@ -336,7 +340,7 @@ p.title{
   font-weight: 700;
   color: #777;
 }
-footer{
+.footer{
   padding: 20px 0;
   margin-top: 50px;
   background-color: white;
@@ -344,7 +348,7 @@ footer{
   font-size: 16px!important;
   width: 100%
 }
-footer .icon{
+.footer .icon{
   width: 20px;
   display: inline-block;
   vertical-align: middle
@@ -913,4 +917,7 @@ nav + *{
 }
 .pagination li:not(:last-child) a{
   border-right: none
+}
+.text-bold{
+  font-weight: 800
 }

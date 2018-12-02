@@ -26,6 +26,15 @@ db.models.Transaction.belongsTo(db.models.Invoice, {
   foreignKey: 'invoiceId'
 })
 
+// db.models.Invoice.belongsTo(db.models.User, {
+//   foreignKey: 'buyerId',
+//   as: 'buyer'
+// })
+// db.models.User.hasMany(db.models.Invoice, {
+//   foreignKey: 'buyerId',
+//   as: 'buyer'
+// })
+
 module.exports = {
   sync: args => db.sync(args),
   sequelize: db,
