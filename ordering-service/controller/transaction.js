@@ -274,13 +274,11 @@ const transactionLunas = async req => {
     },
     include: [
       {
-        model: Invoice,
+        model: Product,
         where: {
-          total: {
-            [sequelize.Op.eq]: sequelize.col('Invoice.paid')
-          }
+          id: sequelize.col('Transaction.productId')
         },
-        attributes: ['total', 'paid']
+        attributes: ['nama', 'harga']
       }
     ]
   })

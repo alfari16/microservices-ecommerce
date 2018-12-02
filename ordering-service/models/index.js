@@ -26,6 +26,14 @@ db.models.Transaction.belongsTo(db.models.Invoice, {
   foreignKey: 'invoiceId'
 })
 
+db.models.Transaction.belongsTo(db.models.Product, {
+  foreignKey: 'productId'
+})
+
+db.models.Product.hasMany(db.models.Transaction, {
+  foreignKey: 'productId'
+})
+
 // db.models.Invoice.belongsTo(db.models.User, {
 //   foreignKey: 'buyerId',
 //   as: 'buyer'
