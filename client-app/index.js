@@ -4,6 +4,7 @@ const session = require('express-session')
 const redis = require('redis')
 const bodyParser = require('body-parser')
 const axios = require('axios')
+const jwt = require('jsonwebtoken')
 const redisStore = require('connect-redis')(session)
 
 const app = express()
@@ -30,6 +31,7 @@ app.use(
 )
 app.use((req, res, next) => {
   res.locals.isLoggedIn = !!req.session.token
+  if (!!req.session.token) res.locals.userId = jwt.verify(req.session.token, 'cute cat').id
   axios.defaults.headers.common['Authorization'] = `Bearer ${req.session.token}`
   req.axios = axios
   next()

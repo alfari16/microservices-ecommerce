@@ -10,7 +10,7 @@ module.exports.home = async (req, res) => {
     const {
       data: { data }
     } = home
-    // console.log(home)
+    console.log(home)
     res.render('home', {
       page,
       product: data.rows,
@@ -31,5 +31,18 @@ module.exports.ownProduct = async (req, res) => {
     res.render('products', data)
   } catch (err) {
     res.json({ err })
+  }
+}
+
+module.exports.productDetail = async (req, res) => {
+  try {
+    const id = req.params.id
+    const {
+      data: { data }
+    } = await req.axios.get(PRODUCT_ENDPOINT + '/' + id)
+    res.render('productDetail')
+    res.json(data)
+  } catch (err) {
+    console.error(err)
   }
 }

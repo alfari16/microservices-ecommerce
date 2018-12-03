@@ -42,7 +42,9 @@ router.get('/done', async (req, res) => {
 })
 router.get('/ordered', async (req, res) => {
   try {
-    let { data: { data } } = await req.axios.get(`${ORDERING_ENDPOINT}/allorder-seller`)
+    let {
+      data: { data }
+    } = await req.axios.get(`${ORDERING_ENDPOINT}/allorder-seller`)
     data = data.map(el => ({
       ...el,
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
@@ -57,7 +59,11 @@ router.get('/ordered', async (req, res) => {
 })
 router.get('/processed', async (req, res) => {
   try {
-    let { data: { data } } = await req.axios.get(`${ORDERING_ENDPOINT}/allorder-seller?status=processed`)
+    let {
+      data: { data }
+    } = await req.axios.get(
+      `${ORDERING_ENDPOINT}/allorder-seller?status=processed`
+    )
     data = data.map(el => ({
       ...el,
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
@@ -68,6 +74,17 @@ router.get('/processed', async (req, res) => {
   } catch (err) {
     console.error(err)
     res.json({ err })
+  }
+})
+
+router.post('/create', async (req, res) => {
+  try {
+    await req.axios.post(ORDERING_ENDPOINT + '/create', {
+      items: [{ ...req.body }]
+    })
+    res.redirect('/transaction')
+  } catch (error) {
+    console.error(error)
   }
 })
 

@@ -1,6 +1,6 @@
 const profile = require('./controller/profile')
 const transaction = require('./controller/transaction')
-const { home, ownProduct } = require('./controller/product')
+const { home, ownProduct, productDetail } = require('./controller/product')
 const { getLogin, getLogout, getRegister, postLogin, postRegister } = require('./controller/auth')
 
 module.exports = app => {
@@ -18,6 +18,7 @@ module.exports = app => {
 
   /* products */
   app.get('/products', ownProduct)
+  app.get('/product/:id', productDetail)
 
   /* transactions */
   app.use('/transaction', transaction)

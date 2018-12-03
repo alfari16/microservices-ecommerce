@@ -5,7 +5,7 @@ Implementation of a Microservices Architecture in an E-Commerce Platform. [Refer
 
  - **Microservices** Architecture with shared database
  - **Node.js** (express) as server side tech at whole services.
- - **MySQL** as RDBMS
+ - **MariaDB** as RDBMS
  - **Sequelize** as Node.js based ORM
  - Manage Queue with **Kue** - **Redis**
  - **JWT** based Authorization

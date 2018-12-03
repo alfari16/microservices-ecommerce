@@ -15,14 +15,19 @@
                   alt="<%= row['nama'] %>"
                 />
               </figure>
-              <a href="<%= '#' %>">
-                <p class="title text-capitalized"><%= row['nama'] %></p>
-              </a>
+              <p class="title text-capitalized"><%= row['nama'] %></p>
               <small class="date"> <%= row.seller.nama %> </small>
-              <div class="flex-wrap align-center">
-                <p class="penulis text-danger">Rp<%= row.harga %></p>
+              <div class="flex-wrap align-center action-buyer">
+                <p class="penulis text-danger harga">Rp<%= row.harga %></p>
                 <div class="spacer"></div>
-                <button class="btn-warning btn">Beli</button>
+                <% if(userId !== row.userId){ %>
+                <form action="/transaction/create" method="POST" class="buy-wrapper flex-wrap">
+                  <input type="hidden" value="<%= row['id'] %>" name="id">
+                  <input type="hidden" value="<%= row.harga %>" name="total">
+                  <input type="number" min="1" max="<%= row['stock'] %>" value="1" name="item" class="inputItem">
+                  <button class="btnBuy">Beli</button>
+                </form>
+                <% } %>
               </div>
             </div>
           </div>
@@ -34,4 +39,12 @@
     </div>
   </div>
 </section>
+<script>
+  $('.input-item').change(function(){
+    var item = Number($(this).val());
+    var harga = $(this).closest('.action-buyer').find('.harga').text().trim().replace(/\D/g, '');
+    console.log(item, harga);
+    $(this).siblings('input[name="total"]').val(item * harga);
+  })
+</script>
 <%- include ./partials/footer %>
