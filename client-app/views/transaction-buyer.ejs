@@ -26,6 +26,7 @@
       <tr>
         <th scope="col">#</th>
         <th scope="col">Invoice</th>
+        <th scope="col">Produk</th>
         <th scope="col">Total</th>
         <th scope="col">Dibayar</th>
         <th scope="col">Tanggal Beli</th>
@@ -37,12 +38,13 @@
       <% data.forEach((el, idx) => { %>
         <tr>
           <th scope="row"><%= idx+1 %></th>
-          <td><%= el.invoice %></td>
+          <td><%= el.invoice+(el.id<10?'0'+el.id:el.id) %></td>
+          <td><%= el.nama %></td>
           <td>Rp <%= el.total %></td>
           <td>Rp <%= el.paid %></td>
           <td><%= el.createdAt %></td>
-          <td><%= el.lunas?el.updatedAt:'-' %></td>
-          <td><%= el.lunas?'LUNAS':'BELUM LUNAS' %></td>
+          <td><%= el.lunas?el.createdAt:el.updatedAt === el.createdAt?'-':el.createdAt %></td>
+          <td><%= el.rejected?'DITOLAK SELLER':el.lunas?'LUNAS':'BELUM LUNAS' %></td>
         </tr>
       <% }) %>
     </tbody>

@@ -1,0 +1,23 @@
+<%- include ./partials/header %>
+<div class="container">
+  <div class="header mt-4">
+    <div class="text-center">
+      <img src="<%= photoUrl %>" class="product-img-detail" alt="<%= nama %>">
+    </div>
+    <form action="/product/<%= id %>/edit" method="POST" class="own-wrapper">
+      <label class="mt-3" for="">Nama Produk</label>
+      <input type="text" class="form-control" value="<%= nama %>" placeholder="Nama" name="nama">
+      <label class="mt-3" for="">Harga Produk</label>
+      <input class="form-control" type="number" min="1" value="<%= harga %>" name="harga">
+      <label class="mt-3" for="">Stok Produk</label>
+      <input type="number" min="1" value="<%= stock %>" name="stock" class="form-control">
+      
+      <input type="hidden" value="<%= id %>" name="id">
+      <div class="flex-wrap mt-4 btn-wrapper">
+        <button class="btn btn-warning mr-3" type="submit">Edit</button>
+        <a href="/product/<%= id %>/delete" class="btn btn-danger ml-3">Hapus</a>
+      </div>
+    </form>
+  </div>
+</div>
+<%- include ./partials/footer %>

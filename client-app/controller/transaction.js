@@ -11,6 +11,7 @@ router.get('/', async (req, res) => {
     } = await req.axios.get(`${ORDERING_ENDPOINT}/allorder-buyer`)
     data = data.map(el => ({
       ...el,
+      nama: el.Transactions[0].Product.nama,
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY'),
       lunas: el.paid === el.total
@@ -29,9 +30,11 @@ router.get('/done', async (req, res) => {
     } = await req.axios.get(`${ORDERING_ENDPOINT}/allorder-buyer?status=lunas`)
     data = data.map(el => ({
       ...el,
+      nama: el.Transactions[0].Product.nama,
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY'),
-      lunas: el.paid === el.total
+      lunas: el.paid === el.total,
+      rejected: el.Transactions[0].processed === 2
     }))
     console.log(data)
     res.render('transaction-buyer', { data })
@@ -51,7 +54,7 @@ router.get('/ordered', async (req, res) => {
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY')
     }))
     console.log(data)
-    res.render('transaction-seller', { data })
+    res.render('transaction-seller', { data, isOrdered: true })
   } catch (err) {
     console.error(err)
     res.json({ err })
@@ -67,10 +70,11 @@ router.get('/processed', async (req, res) => {
     data = data.map(el => ({
       ...el,
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
-      updatedAt: moment(el.updatedAt).format('DD MMM YYYY')
+      updatedAt: moment(el.updatedAt).format('DD MMM YYYY'),
+      rejected: el.processed === 2
     }))
     console.log(data)
-    res.render('transaction-seller', { data })
+    res.render('transaction-seller', { data, isOrdered: false })
   } catch (err) {
     console.error(err)
     res.json({ err })
@@ -82,9 +86,39 @@ router.post('/create', async (req, res) => {
     await req.axios.post(ORDERING_ENDPOINT + '/create', {
       items: [{ ...req.body }]
     })
-    res.redirect('/transaction')
+    setTimeout(() => {
+      res.redirect('/transaction')
+    }, 5000)
   } catch (error) {
     console.error(error)
+  }
+})
+
+router.get('/process/:id', async (req, res) => {
+  try {
+    await req.axios.post(ORDERING_ENDPOINT + '/process-order', {
+      transactionId: req.params.id
+    })
+    setTimeout(() => {
+      res.redirect('/transaction/processed')
+    }, 5000)
+  } catch (err) {
+    res.send(err)
+    console.error(err)
+  }
+})
+
+router.get('/reject/:id', async (req, res) => {
+  try {
+    await req.axios.post(ORDERING_ENDPOINT + '/reject-order', {
+      transactionId: req.params.id
+    })
+    setTimeout(() => {
+      res.redirect('/transaction/processed')
+    }, 5000)
+  } catch (err) {
+    res.send(err)
+    console.error(err)
   }
 })
 

@@ -40,9 +40,54 @@ module.exports.productDetail = async (req, res) => {
     const {
       data: { data }
     } = await req.axios.get(PRODUCT_ENDPOINT + '/' + id)
-    res.render('productDetail')
-    res.json(data)
+    console.log(data)
+    if (data.userId === res.locals.userId)
+      return res.render('productOwnDetail', data)
+    res.render('productDetail', data)
   } catch (err) {
+    console.error(err)
+  }
+}
+
+module.exports.createProduct = (req, res) => {
+  try {
+    res.render('createProduct')
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+module.exports.createProductPost = async (req, res) => {
+  try {
+    await req.axios.post(PRODUCT_ENDPOINT + '/create', {
+      ...req.body,
+      photoUrl: '/upload/' + req.file.filename
+    })
+    res.redirect('/products')
+  } catch (err) {
+    res.send(err)
+    console.error(err)
+  }
+}
+
+module.exports.deleteProduct = async (req, res) => {
+  try {
+    await req.axios.delete(`${PRODUCT_ENDPOINT}/${req.params.id}/delete`)
+    res.redirect('/products')
+  } catch (err) {
+    res.send('Terdapat kesalahan')
+    console.error(err)
+  }
+}
+
+module.exports.editProduct = async (req, res) => {
+  try {
+    const data = { ...req.body }
+    delete data.id
+    await req.axios.put(`${PRODUCT_ENDPOINT}/${req.params.id}/edit`, data)
+    res.redirect('/product/' + req.params.id)
+  } catch (err) {
+    res.send('Terdapat kesalahan ' + err)
     console.error(err)
   }
 }

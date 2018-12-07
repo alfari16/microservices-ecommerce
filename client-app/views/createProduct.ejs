@@ -1,0 +1,34 @@
+<%- include ./partials/header %>
+<div class="container">
+  <div class="header mt-4">
+    <form action="/product/create" method="POST" class="own-wrapper" enctype="multipart/form-data">
+      <label class="picker flex-wrap justify-center" for="profile-pics">
+        <img src="/assets/default-photo.png" class="profile-pics" />
+      </label>
+      <input
+        type="file"
+        id="profile-pics"
+        name="photoUrl"
+        accept="image/*"
+        class="hidden"
+      />
+      <label class="mt-3" for="">Nama Produk</label>
+      <input required type="text" class="form-control" placeholder="Nama" name="nama" />
+      <label class="mt-3" for="">Harga Produk</label>
+      <input required placeholder="harga" class="form-control" type="number" min="1" name="harga" />
+      <label class="mt-3" for="">Stok Produk</label>
+      <input required placeholder="Stok" type="number" min="1" name="stock" class="form-control" />
+
+      <button class="btn btn-warning mr-3 block mt-3" type="submit">
+        Tambah Produk
+      </button>
+    </form>
+  </div>
+</div>
+<script>
+  $('#profile-pics').change(function (e) {
+    const img = URL.createObjectURL(e.target.files[0])
+    $('.profile-pics').attr('src', img)
+  })
+</script>
+<%- include ./partials/footer %>

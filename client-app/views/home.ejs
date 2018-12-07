@@ -1,5 +1,5 @@
 <%- include ./partials/header %>
-<section class="main pt-3 mt-5">
+<section class="main pt-3 mt-3">
   <div class="container">
     <div class="row">
       <div class="md8 sm9 xs12">
@@ -15,7 +15,8 @@
                   alt="<%= row['nama'] %>"
                 />
               </figure>
-              <p class="title text-capitalized"><%= row['nama'] %></p>
+              <p class="title text-capitalized"><a href="/product/<%= row.id %>">
+                <%= row['nama'] %></a></p> 
               <small class="date"> <%= row.seller.nama %> </small>
               <div class="flex-wrap align-center action-buyer">
                 <p class="penulis text-danger harga">Rp<%= row.harga %></p>
@@ -40,7 +41,7 @@
   </div>
 </section>
 <script>
-  $('.input-item').change(function(){
+  $('.inputItem').change(function(){
     var item = Number($(this).val());
     var harga = $(this).closest('.action-buyer').find('.harga').text().trim().replace(/\D/g, '');
     console.log(item, harga);

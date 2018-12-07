@@ -1,23 +1,24 @@
 <%- include ./partials/header %>
 <div class="container mt-5">
-  <p class="penulis jangka mb-3">
+  <p class="penulis jangka mb-3 flex-wrap">
     <span>Produk Saya</span>
+    <a href="/product/create" class="btnCreateProduct mr-3 btn btn-primary">Tambah Produk</a>
   </p>
   <div class="row">
     <% rows.forEach(row => { %>
       <div class="md4 sm6 xs6">
         <div class="card">
           <figure class="img-wrapper content">
-            <img class="img-content" src="<%= row['photoUrl'] %>" alt="<%= row['nama'] %>">
+            <img name="photo" class="img-content" src="<%= row['photoUrl'] %>" alt="<%= row['nama'] %>">
           </figure>
           <div class="flex-wrap align-center">
-            <a href="<%= '#' %>">
+            <a href="/product/<%= row.id %>">
               <p class="title text-capitalized">
                 <%= row['nama'] %>
               </p>
             </a>
             <div class="spacer"></div>
-            <button class="btn-warning btn">Detail</button>
+            <a href="/product/<%= row.id %>" class="btn-warning btn">Detail</a>
           </div>
         </div>
       </div>

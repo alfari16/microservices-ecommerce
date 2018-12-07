@@ -11,8 +11,5 @@ module.exports = async (db, Sequelize) =>
       invoiceId: Sequelize.INTEGER,
       item: Sequelize.INTEGER,
       processed: Sequelize.BOOLEAN
-    },
-    {
-      timestamps: false
     }
   )

@@ -416,7 +416,6 @@ p.title {
   text-align: right;
 }
 .btn {
-  background-color: var(--accentColor);
   padding: 10px 20px;
   border: none;
   color: white;
@@ -424,6 +423,9 @@ p.title {
 }
 .btn.btn-warning {
   background-color: #ffa726;
+}
+.btn.btn-primary {
+  background-color: var(--accentColor);
 }
 .sidebar .btn {
   margin-left: -10px;
@@ -528,7 +530,7 @@ nav + * {
   height: 100%;
 }
 
-.profile .profile-pics {
+.profile-pics {
   display: block;
   width: 200px;
   height: 200px;
@@ -934,5 +936,34 @@ nav + * {
 }
 .buy-wrapper{
   height: 40px;
-  align-items: stretch
+  align-items: stretch;
+  justify-content: center
+}
+.product-img-detail{
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: contain
+}
+.block{
+  display: block;
+  width: 100%
+}
+.own-wrapper{
+  width: 500px;
+  margin: 0 auto;
+}
+
+.own-wrapper .btn-wrapper *{
+  flex-grow: 1
+}
+.btnCreateProduct{
+  position: relative;
+  z-index: 99;
+}
+.table-seller tr,
+.table-seller th,
+.table-seller td{
+  vertical-align: middle
 }

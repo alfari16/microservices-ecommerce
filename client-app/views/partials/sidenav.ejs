@@ -7,7 +7,7 @@
         popular.forEach(single => {
       %>
       <li>
-        <a href="#" class="flex-wrap">
+        <a href="/product/<%= single.id %>" class="flex-wrap">
           <img class="sidenav-img" src="<%= single.photoUrl %>" alt="<%= single.nama %>">
           <div class="right flex-wrap">
             <p class="title sub-title"><%= single.nama %></p>

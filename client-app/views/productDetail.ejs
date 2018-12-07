@@ -1,22 +1,18 @@
 <%- include ./partials/header %>
 <div class="container">
-  <div class="header flex-wrap">
-    <img src="<%= photoUrl %>" alt="<%= nama %>">
-    <div class="product-desc">
-      <h1 class="title"><%= nama %></h1>
-      <p class="product-price"><%= harga %></p>
+  <div class="header text-center mt-4">
+    <img src="<%= photoUrl %>" class="product-img-detail" alt="<%= nama %>">
+    <div class="product-desc text-center mt-4">
+      <h4 class="title"><%= nama %></h4>
+      <p class="product-price mb-0">Rp<%= harga %></p>
+      <p class="product-price">Stok:   <%= stock %></p>
     </div>
-    <% if(userId !== row.userId){ %>
-    <form action="/transaction/create" method="POST" class="buy-wrapper flex-wrap">
-      <input type="hidden" value="<%= row['id'] %>" name="id">
-      <input type="hidden" value="<%= row.harga %>" name="total">
-      <input type="number" min="1" max="<%= row['stock'] %>" value="1" name="item" class="inputItem">
+    <form action="/transaction/create" method="POST" class="buy-wrapper flex-wrap text-center">
+      <input type="hidden" value="<%= id %>" name="id">
+      <input type="hidden" value="<%= harga %>" name="total">
+      <input type="number" min="1" max="<%= stock %>" value="1" name="item" class="inputItem">
       <button class="btnBuy">Beli</button>
     </form>
-    <% } %>
-    <div class="mt-3">
-      <p class="desc"></p>
-    </div>
   </div>
 </div>
 <%- include ./partials/footer %>

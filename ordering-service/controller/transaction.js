@@ -152,11 +152,31 @@ router.get('/allorder-buyer', isLoggedIn, async (req, res) => {
       where: {
         buyerId: req.stateId,
         total: lunas
-          ? sequelize.col('Invoice.paid')
-          : {
-              [sequelize.Op.gt]: sequelize.col('Invoice.paid')
+          ? {
+              [sequelize.Op.eq]: sequelize.col('Invoice.paid')
             }
-      }
+          : {
+              [sequelize.Op.not]: sequelize.col('Invoice.paid')
+            }
+      },
+      include: [
+        {
+          model: Transaction,
+          where: {
+            id: sequelize.col('Invoice.id')
+          },
+          attributes: ['id', 'productId', 'processed'],
+          include: [
+            {
+              model: Product,
+              where: {
+                id: sequelize.col('Transactions.productId')
+              },
+              attributes: ['nama']
+            }
+          ]
+        }
+      ]
     })
     res.json({ isOk: true, data })
   } catch (err) {
@@ -190,6 +210,12 @@ router.post(
         const { total } = await Invoice.findOne({
           where: { id: req.body.invoiceId }
         })
+
+        // const transaction = await Transaction.findOne({
+        //   where: {
+        //     invoiceId: req.body.invoiceId
+        //   }
+        // })
 
         const sisa = Math.max(0, req.body.value - total)
         const { balance } = await User.findOne({ where: { id: req.stateId } })
@@ -257,6 +283,45 @@ router.post(
   }
 )
 
+router.post(
+  '/reject-order',
+  isLoggedIn,
+  validate({
+    body: {
+      transactionId: joi.number().required()
+    }
+  }),
+  (req, res) => {
+    sequelize.transaction(async transaction => {
+      try {
+        const allTrans = await transactionLunas(req)
+        const { id } = allTrans.find(el => el.id === req.body.transactionId)
+
+        if (!id)
+          return res
+            .status(404)
+            .json({ isError: true, errorMsg: 'Transaction not found' })
+
+        await Transaction.update(
+          {
+            processed: 2
+          },
+          {
+            where: {
+              id: req.body.transactionId
+            },
+            transaction
+          }
+        )
+        res.json({ isOk: true })
+      } catch (err) {
+        console.error(err)
+        res.json({ err, isError: true })
+      }
+    })
+  }
+)
+
 const transactionLunas = async req => {
   const processed = req.query.status === 'processed'
   const productId = await Product.findAll({
@@ -270,7 +335,11 @@ const transactionLunas = async req => {
       productId: {
         in: productId.map(el => el.id)
       },
-      processed
+      processed: processed
+        ? {
+            [sequelize.Op.gte]: 1
+          }
+        : 0
     },
     include: [
       {

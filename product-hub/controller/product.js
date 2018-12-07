@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 router.get('/product-popular', async (req, res) => {
   try {
     const data = await sequelize.query(
-      "SELECT COUNT('*') AS total, nama, harga, photoUrl FROM `Transactions`, Products WHERE productId=Products.id GROUP BY productId ORDER BY total DESC LIMIT 3"
+      "SELECT COUNT('*') AS total, nama, harga, photoUrl, Products.id FROM `Transactions`, Products WHERE productId=Products.id GROUP BY productId ORDER BY total DESC LIMIT 3"
     )
     res.json({ isOk: true, data })
   } catch (err) {
@@ -118,7 +118,7 @@ router.put(
       nama: joi.string().required(),
       harga: joi.string().required(),
       stock: joi.string().required(),
-      photoUrl: joi.string().required()
+      photoUrl: joi.string()
     },
     options: {
       allowUnknownBody: false

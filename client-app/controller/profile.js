@@ -2,17 +2,7 @@ const { USERAUTH_ENDPOINT } = require('../config/api_endpoint')
 
 const router = require('express').Router()
 const crypto = require('crypto')
-const multer = require('multer')
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'public/upload')
-  },
-  filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`)
-  }
-})
-const upload = multer({ storage })
+const upload = require('../middleware/upload')
 
 router.get('/', async (req, res) => {
   try {
