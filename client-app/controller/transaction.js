@@ -86,10 +86,13 @@ router.post('/create', async (req, res) => {
     await req.axios.post(ORDERING_ENDPOINT + '/create', {
       items: [{ ...req.body }]
     })
-    setTimeout(() => {
-      res.redirect('/transaction')
-    }, 5000)
-  } catch (error) {
+    res.redirect('/transaction')
+  } catch (err) {
+    if (err && err.response) {
+      res.redirect('/?error=' + err.response.data.errorMsg)
+    } else {
+      res.json({ error })
+    }
     console.error(error)
   }
 })

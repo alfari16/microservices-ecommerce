@@ -25,7 +25,9 @@ queue.process('order', (job, done) => {
         attributes: ['id', 'stock']
       })
       allProduct = allProduct.map(el => {
-        if (el.stock < req.body.items.find(inner => inner.id === el.id).item) {
+        const itemStock = req.body.items.find(inner => inner.id === el.id).item
+        console.log('=====', el.stock, itemStock, '=====')
+        if (el.stock < itemStock) {
           outOfStock.bool = true
           outOfStock.data.push(el)
         }
@@ -95,7 +97,9 @@ queue.process('order', (job, done) => {
       })
 
       await Promise.all([promise1, promise2])
-      done(null, 'ok')
+      setTimeout(() => {
+        done(null, 'ok')
+      }, 2000)
     } catch (err) {
       done(err)
       console.error(err)
@@ -124,23 +128,23 @@ router.post(
   }),
   isLoggedIn,
   (req, res) => {
-    const job = queue
+    queue
       .create('order', {
         req: { body: req.body, stateId: req.stateId }
       })
       .on('failed', err => {
-        res.json({
+        res.status(500).json({
           isError: true,
           ...JSON.parse(err)
         })
-        job.remove()
+        // job.remove()
       })
       .on('complete', () => {
         res.json({ isOk: true })
-        job.remove()
+        // job.remove()
       })
       .save(err => {
-        if (err) res.json({ isError: true, err })
+        if (err) res.status(500).json({ isError: true, err })
       })
   }
 )

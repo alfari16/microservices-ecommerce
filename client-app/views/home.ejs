@@ -47,5 +47,8 @@
     console.log(item, harga);
     $(this).siblings('input[name="total"]').val(item * harga);
   })
+  if(location.href.includes('error')) {
+    alert(decodeURI(location.href.replace(/^.+error=/gm, '')))
+  }
 </script>
 <%- include ./partials/footer %>
