@@ -96,7 +96,7 @@ router.post('/create', async (req, res) => {
 
 router.get('/process/:id', async (req, res) => {
   try {
-    await req.axios.post(ORDERING_ENDPOINT + '/process-order', {
+    const result = await req.axios.post(ORDERING_ENDPOINT + '/process-order', {
       transactionId: req.params.id
     })
     setTimeout(() => {

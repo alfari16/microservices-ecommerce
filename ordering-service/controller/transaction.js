@@ -256,24 +256,49 @@ router.post(
     sequelize.transaction(async transaction => {
       try {
         const allTrans = await transactionLunas(req)
-        const { id } = allTrans.find(el => el.id === req.body.transactionId)
+        const {
+          id,
+          Product: { harga },
+          item
+        } = allTrans.find(el => el.id === req.body.transactionId)
 
         if (!id)
           return res
             .status(404)
             .json({ isError: true, errorMsg: 'Transaction not found' })
-
-        await Transaction.update(
-          {
-            processed: true
-          },
-          {
+        const balance = Number(harga) * Number(item)
+        const balanceOrigin = Number(
+          (await User.findOne({
             where: {
-              id: req.body.transactionId
-            },
-            transaction
-          }
+              id: req.stateId
+            }
+          })).balance
         )
+
+        await Promise.all([
+          Transaction.update(
+            {
+              processed: true
+            },
+            {
+              where: {
+                id: req.body.transactionId
+              },
+              transaction
+            }
+          ),
+          User.update(
+            {
+              balance: balance + balanceOrigin
+            },
+            {
+              where: {
+                id: req.stateId
+              },
+              transaction
+            }
+          )
+        ])
         res.json({ isOk: true })
       } catch (err) {
         console.error(err)
@@ -295,9 +320,13 @@ router.post(
     sequelize.transaction(async transaction => {
       try {
         const allTrans = await transactionLunas(req)
-        const { id, productId, item } = allTrans.find(
-          el => el.id === req.body.transactionId
-        )
+        const {
+          id,
+          productId,
+          item,
+          Product: { harga },
+          Invoice: { buyerId }
+        } = allTrans.find(el => el.id === req.body.transactionId)
 
         if (!id)
           return res
@@ -310,6 +339,12 @@ router.post(
           }
         })
 
+        const { balance } = await User.findOne({
+          where: {
+            id: buyerId
+          }
+        })
+
         await Promise.all([
           Transaction.update(
             { processed: 2 },
@@ -317,12 +352,24 @@ router.post(
           ),
           Product.update(
             {
-              stock: stock + item
+              stock: Number(stock) + Number(item)
             },
             {
               where: {
                 id: productId
-              }
+              },
+              transaction
+            }
+          ),
+          User.update(
+            {
+              balance: Number(balance) + Number(item) * Number(harga)
+            },
+            {
+              where: {
+                id: buyerId
+              },
+              transaction
             }
           )
         ])
@@ -361,6 +408,10 @@ const transactionLunas = async req => {
           id: sequelize.col('Transaction.productId')
         },
         attributes: ['nama', 'harga']
+      },
+      {
+        model: Invoice,
+        attributes: ['buyerId']
       }
     ]
   })
