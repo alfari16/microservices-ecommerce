@@ -295,24 +295,37 @@ router.post(
     sequelize.transaction(async transaction => {
       try {
         const allTrans = await transactionLunas(req)
-        const { id } = allTrans.find(el => el.id === req.body.transactionId)
+        const { id, productId, item } = allTrans.find(
+          el => el.id === req.body.transactionId
+        )
 
         if (!id)
           return res
             .status(404)
             .json({ isError: true, errorMsg: 'Transaction not found' })
 
-        await Transaction.update(
-          {
-            processed: 2
-          },
-          {
-            where: {
-              id: req.body.transactionId
-            },
-            transaction
+        const { stock } = await Product.findOne({
+          where: {
+            id: productId
           }
-        )
+        })
+
+        await Promise.all([
+          Transaction.update(
+            { processed: 2 },
+            { where: { id: req.body.transactionId }, transaction }
+          ),
+          Product.update(
+            {
+              stock: stock + item
+            },
+            {
+              where: {
+                id: productId
+              }
+            }
+          )
+        ])
         res.json({ isOk: true })
       } catch (err) {
         console.error(err)

@@ -31,7 +31,7 @@ app.use(
 )
 app.use((req, res, next) => {
   res.locals.isLoggedIn = !!req.session.token
-  if (!!req.session.token) res.locals.userId = jwt.verify(req.session.token, 'cute cat').id
+  res.locals.userId = jwt.verify(req.session.token, 'cute cat').id || null
   axios.defaults.headers.common['Authorization'] = `Bearer ${req.session.token}`
   req.axios = axios
   next()
