@@ -3,13 +3,13 @@
 <form action="/register" method="POST">
     <p class="title text-center login-title">Daftar</p>
     <input placeholder="Nama" class="form-control" type="text" name="nama" required>
-    <input placeholder="Username" class="form-control" type="text" name="email" required>
+    <input placeholder="Email" class="form-control" type="text" name="email" required>
     <input placeholder="Password" class="form-control" type="password" name="password" required>
 <% if(haveBeenUsed){%>
     <p class="text-center text-danger mt-3">Email sudah dipakai!</p>
 <% }%>
     <p class="text-center text-mute mt-3">Sudah punya akun? <a href="/login">Login</a>.</p>
-    <input class="btn form-control mt-3" type="submit" value="Daftar">
+    <input class="btn btn-warning form-control mt-3" type="submit" value="Daftar">
 </form>
 </div>
 <%- include ./partials/footer %>

@@ -48,10 +48,10 @@
           <div class="link-wrapper">
             <ul class="link">
               <li id="home"><a href="/">Beranda</a></li>
+              <% if(isLoggedIn) { %>
               <li id="transaction"><a href="/transaction">Transaksi</a></li>
               <li id="products"><a href="/products">Produk Saya</a></li>
               <li id="profile"><a href="/profile">Profil</a></li>
-              <% if(isLoggedIn) { %>
               <li class="btn-link">
                 <a href="/logout" class="ml-3 btn btn-warning">Logout</a>
               </li>
@@ -87,5 +87,6 @@
               activated = true
             }
           })
-        if (!activated) $('#home').addClass('active')
+        if (location.href === 'http://localhost:8000/') $('#home').addClass('active')
+        console.log(location.href)
       </script>
