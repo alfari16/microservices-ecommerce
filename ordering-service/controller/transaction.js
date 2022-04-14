@@ -9,7 +9,7 @@ const queue = kue.createQueue()
 
 queue.process('order', (job, done) => {
   const { req } = job.data
-  console.log('REQ', req)
+  // console.log('REQ', req)
   sequelize.transaction(async transaction => {
     try {
       let outOfStock = {
@@ -26,7 +26,7 @@ queue.process('order', (job, done) => {
       })
       allProduct = allProduct.map(el => {
         const itemStock = req.body.items.find(inner => inner.id === el.id).item
-        console.log('=====', el.stock, itemStock, '=====')
+        // console.log('=====', el.stock, itemStock, '=====')
         if (el.stock < itemStock) {
           outOfStock.bool = true
           outOfStock.data.push(el)
@@ -128,6 +128,7 @@ router.post(
   }),
   isLoggedIn,
   (req, res) => {
+    console.log('****************************** inside create transaction ****************************** ')
     queue
       .create('order', {
         req: { body: req.body, stateId: req.stateId }
