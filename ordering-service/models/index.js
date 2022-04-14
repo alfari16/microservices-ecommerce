@@ -8,7 +8,7 @@ const invoiceModel = require('./invoice')
 const db = new Sequelize({
   host: process.env.HOST,
   username: process.env.DB_ATTR,
-  password: process.env.DB_ATTR,
+  // password: process.env.DB_ATTR,
   database: process.env.DATABASE,
   dialect: 'mysql'
 })

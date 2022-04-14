@@ -7,7 +7,6 @@ module.exports = (req, res, next) => {
       req.headers.authorization.split(' ')[1],
       process.env.SECRET
     )
-    console.log(verify)
     if (!verify)
       return res.status(401).json({
         errorMsg: 'Not authenticated',

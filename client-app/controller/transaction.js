@@ -16,7 +16,6 @@ router.get('/', async (req, res) => {
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY'),
       lunas: el.paid === el.total
     }))
-    console.log(data)
     res.render('transaction-buyer', { data })
   } catch (err) {
     console.error(err)
@@ -36,7 +35,6 @@ router.get('/done', async (req, res) => {
       lunas: el.paid === el.total,
       rejected: el.Transactions[0].processed === 2
     }))
-    console.log(data)
     res.render('transaction-buyer', { data })
   } catch (err) {
     console.error(err)
@@ -53,7 +51,6 @@ router.get('/ordered', async (req, res) => {
       createdAt: moment(el.createdAt).format('DD MMM YYYY'),
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY')
     }))
-    console.log(data)
     res.render('transaction-seller', { data, isOrdered: true })
   } catch (err) {
     console.error(err)
@@ -73,7 +70,6 @@ router.get('/processed', async (req, res) => {
       updatedAt: moment(el.updatedAt).format('DD MMM YYYY'),
       rejected: el.processed === 2
     }))
-    console.log(data)
     res.render('transaction-seller', { data, isOrdered: false })
   } catch (err) {
     console.error(err)
@@ -91,9 +87,9 @@ router.post('/create', async (req, res) => {
     if (err && err.response) {
       res.redirect('/?error=' + err.response.data.errorMsg)
     } else {
-      res.json({ error })
+      res.json({ err })
     }
-    console.error(error)
+    console.error(err)
   }
 })
 

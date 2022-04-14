@@ -44,7 +44,6 @@
   $('.inputItem').change(function(){
     var item = Number($(this).val());
     var harga = $(this).closest('.action-buyer').find('.harga').text().trim().replace(/\D/g, '');
-    console.log(item, harga);
     $(this).siblings('input[name="total"]').val(item * harga);
   })
   if(location.href.includes('error')) {

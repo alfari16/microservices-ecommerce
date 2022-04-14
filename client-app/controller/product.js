@@ -10,7 +10,6 @@ module.exports.home = async (req, res) => {
     const {
       data: { data }
     } = home
-    console.log(home)
     res.render('home', {
       page,
       product: data.rows,
@@ -27,7 +26,6 @@ module.exports.ownProduct = async (req, res) => {
     const {
       data: { data }
     } = await req.axios.get(`${PRODUCT_ENDPOINT}/own`)
-    console.log(data)
     res.render('products', data)
   } catch (err) {
     res.json({ err })
@@ -40,7 +38,6 @@ module.exports.productDetail = async (req, res) => {
     const {
       data: { data }
     } = await req.axios.get(PRODUCT_ENDPOINT + '/' + id)
-    console.log(data)
     if (data.userId === res.locals.userId)
       return res.render('productOwnDetail', data)
     res.render('productDetail', data)

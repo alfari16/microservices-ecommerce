@@ -9,7 +9,6 @@ router.get('/', async (req, res) => {
   try {
     const limit = Number(req.query.limit || 10)
     const offset = Number(req.query.page || 0) * limit
-    console.log(offset)
 
     const data = await Product.findAndCountAll({
       limit,
@@ -31,7 +30,6 @@ router.get('/', async (req, res) => {
       },
       order: [['id', 'DESC'], ['nama', 'ASC']]
     })
-    console.log('all Product', data)
     res.json({ isOk: true, data })
   } catch (err) {
     console.error(err)
@@ -98,7 +96,6 @@ router.get('/:id', async (req, res) => {
         id
       }
     })
-    console.log('One Product', data)
     if (data) res.json({ isOk: true, data })
     else res.status(404).json({ isError: true, errorMsg: 'Product Not Found' })
   } catch (err) {
@@ -131,7 +128,6 @@ router.put(
 
       const isProductValid = await Product
       const data = await Product.findOne({ where: { id: productId, userId } })
-      console.log('Edit One Product', data)
       if (!data)
         return res
           .status(404)

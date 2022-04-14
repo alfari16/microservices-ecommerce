@@ -22,7 +22,6 @@
 <script src="/js/tinymce/tinymce.min.js"></script>
 <script>
   $('#thumbnail').change(function (e) {
-    console.log('triggerred', e.target.files[0])
     var check = $('#gambar-thumbnail').length < 1;
     if (check) {
       var img = document.createElement('img');

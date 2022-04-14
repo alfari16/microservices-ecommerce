@@ -4,6 +4,8 @@ const crypto = require('crypto')
 const getLogin = (req, res) => {
   const notLogin = req.query.notLogin
   const notFound = req.query.notFound
+  console.log('*********************** notLogin ***********************', notLogin);
+  console.log('*********************** notFound ***********************', notFound);
   res.render('login', { notLogin, notFound })
 }
 
@@ -24,7 +26,6 @@ const postLogin = async (req, res) => {
         .digest('hex')
     })
     req.session.token = token
-    console.log(token)
     res.redirect('/')
   } catch (error) {
     if (error.response && error.response.status === 404) {
@@ -53,7 +54,6 @@ const postRegister = async (req, res) => {
         .digest('hex')
     })
     req.session.token = token
-    console.log(token)
     res.redirect('/')
   } catch (error) {
     if (error.response && error.response.status === 403) {

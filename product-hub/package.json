@@ -19,6 +19,7 @@
     "jsonwebtoken": "^8.4.0",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.4",
+    "nodemon": "^2.0.15",
     "sequelize": "^4.41.2"
   }
 }
